@@ -1,12 +1,11 @@
 function NavBar() {
   const {
-    loggedIn,
     setLoggedIn,
     currentPage,
     setCurrentPage,
     lastPage,
     setLastPage,
-    setCurrentUser,
+    setUser,
   } = React.useContext(UserContext);
 
   React.useEffect(() => {
@@ -31,9 +30,17 @@ function NavBar() {
 
   function logout() {
     setLoggedIn(false);
-    setCurrentUser({});
+    setUser({});
     setLastPage(currentPage);
     setCurrentPage("#/login/");
+  }
+
+  function loggedIn() {
+    firebaseApp.auth().onAuthStateChanged((user) => {
+      if (user) {
+        return user;
+      }
+    });
   }
 
   return (
@@ -59,7 +66,7 @@ function NavBar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          {!loggedIn ? (
+          {loggedIn ? (
             <div className="navbar-nav">
               <a
                 id="#/login/"

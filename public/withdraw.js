@@ -4,8 +4,7 @@ function Withdraw() {
   const [status, setStatus] = React.useState("");
   const [bgColor, setBgColor] = React.useState("dark");
   const [withdraw, setWithdraw] = React.useState("");
-  const { currentUser, setCurrentUser, loggedIn } =
-    React.useContext(UserContext);
+  const { user, setUser, loggedIn } = React.useContext(UserContext);
   const history = useHistory();
   if (!loggedIn) history.push("/#");
 
@@ -26,7 +25,7 @@ function Withdraw() {
       return;
     }
 
-    if (withdraw > currentUser.balance) {
+    if (withdraw > user.balance) {
       setStatus(
         "Transaction failed: Withdrawal value can't be greater than balance"
       );
@@ -36,8 +35,8 @@ function Withdraw() {
       return;
     }
 
-    currentUser.balance = Number(currentUser.balance) - Number(withdraw);
-    setCurrentUser(currentUser);
+    user.balance = Number(user.balance) - Number(withdraw);
+    setUser(user);
     alert(`Withdrawal of $${withdraw} successfully made!`);
     setWithdraw("");
   }
@@ -52,7 +51,7 @@ function Withdraw() {
         <div>
           <div className="d-flex">
             <div>Balance</div>
-            <div className="ml-auto">{currentUser.balance}</div>
+            <div className="ml-auto">{user.balance}</div>
           </div>
           <br />
           Withdrawal Amount

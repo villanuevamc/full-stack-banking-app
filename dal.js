@@ -20,6 +20,14 @@ function create(name, email, password) {
   });
 }
 
+function getUser(email, password) {
+  return new Promise(() => {
+    const user = db
+      .collection("users")
+      .findOne({ email: email, password: password });
+  });
+}
+
 function all() {
   return new Promise((resolve, reject) => {
     const customers = db
@@ -31,4 +39,4 @@ function all() {
   });
 }
 
-module.exports = { create, all };
+//module.exports = { create, getUser, all };

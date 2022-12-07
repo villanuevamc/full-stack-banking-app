@@ -3,6 +3,11 @@ function AllData() {
 
   React.useEffect(() => {
     // fetch all account from API
+    var token;
+    (async () => {
+      token = await firebaseApp.auth().currentUser.getIdToken();
+    })();
+
     fetch("/account/all")
       .then((response) => response.json())
       .then((data) => {

@@ -4,8 +4,7 @@ function Deposit() {
   const [status, setStatus] = React.useState("");
   const [bgColor, setBgColor] = React.useState("dark");
   const [deposit, setDeposit] = React.useState("");
-  const { currentUser, setCurrentUser, loggedIn } =
-    React.useContext(UserContext);
+  const { user, setUser, loggedIn } = React.useContext(UserContext);
   const history = useHistory();
   if (!loggedIn) history.push("/#");
 
@@ -26,8 +25,8 @@ function Deposit() {
       return;
     }
 
-    currentUser.balance = Number(currentUser.balance) + Number(deposit);
-    setCurrentUser(currentUser);
+    user.balance = Number(user.balance) + Number(deposit);
+    setUser(user);
     alert(`Deposit of $${deposit} successfully made!`);
     setDeposit("");
   }
@@ -42,7 +41,7 @@ function Deposit() {
         <div>
           <div className="d-flex">
             <div>Balance</div>
-            <div className="ml-auto">{currentUser.balance}</div>
+            <div className="ml-auto">{user.balance}</div>
           </div>
           <br />
           Deposit Amount

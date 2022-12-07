@@ -1,33 +1,22 @@
 const useHistory = ReactRouterDOM.useHistory;
 
 function Login() {
-  const [userEmail, setUserEmail] = React.useState("");
-  const [userPassword, setUserPassword] = React.useState("");
-  const {
-    users,
-    setCurrentUser,
-    setLoggedIn,
-    setCurrentPage,
-    lastPage,
-    setLastPage,
-  } = React.useContext(UserContext);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const { user, setUser, setCurrentPage, lastPage, setLastPage } =
+    React.useContext(UserContext);
   const history = useHistory();
 
   function login() {
-    const user = users.find((user) => {
-      if (user.email === userEmail && user.password === userPassword)
-        return user;
-    });
+    firebase.auth().signInWithEmailAndPassword(email, password);
 
-    if (!user) {
+    /*if (!user) {
       alert("That user does not exist");
-      setUserEmail("");
-      setUserPassword("");
-      return;
-    }
+      setEmail("");
+      setPassword("");
+      return;s
+    }*/
 
-    setCurrentUser(user);
-    setLoggedIn(true);
     alert("Successfully logged in!");
     setLastPage("#/createAccount/");
     setCurrentPage("#/");
@@ -49,8 +38,8 @@ function Login() {
             className="form-control"
             id="userEmail"
             placeholder="Enter email"
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.currentTarget.value)}
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
           />
           <br />
           Password
@@ -60,14 +49,14 @@ function Login() {
             className="form-control"
             id="userPassword"
             placeholder="Enter password"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.currentTarget.value)}
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
           />
           <br />
           <button
             id="submit"
             type="submit"
-            disabled={!userEmail || !userPassword}
+            disabled={!email || !password}
             className="btn btn-light"
             onClick={login}
           >
