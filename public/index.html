@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Bad Bank</title>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <!-- project css -->
+  <link rel="stylesheet" type="text/css" href="./styles.css" />
+
+  <!-- don't use this in production: -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+  <!-- we will put our teact component inside this div -->
+  <div id="root"></div>
+
+  <!-- load react -->
+  <script src="https://unpkg.com/react/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-router@5.2.1/umd/react-router.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-router-dom@5.2.1/umd/react-router-dom.min.js" crossorigin></script>
+
+  <!-- load our react component. -->
+  <script src="context.js" defer type="text/babel"></script>
+  <script src="navbar.js" defer type="text/babel"></script>
+  <script src="createaccount.js" defer type="text/babel"></script>
+  <script src="login.js" defer type="text/babel"></script>
+  <script src="deposit.js" defer type="text/babel"></script>
+  <script src="withdraw.js" defer type="text/babel"></script>
+  <script src="alldata.js" defer type="text/babel"></script>
+  <script src="home.js" defer type="text/babel"></script>
+  <script src="index.js" defer type="text/babel"></script>
+</body>
+
+</html>
