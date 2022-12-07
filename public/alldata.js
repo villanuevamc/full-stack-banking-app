@@ -3,17 +3,19 @@ function AllData() {
 
   React.useEffect(() => {
     // fetch all account from API
-    var token;
+    var token, res;
     (async () => {
-      token = await firebaseApp.auth().currentUser.getIdToken();
+      token = await auth.currentUser.getIdToken();
+      res = await fetch("/account/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     })();
 
-    fetch("/account/all")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      });
+    console.log(res);
+    setData(res.json());
   }, []);
 
   return (

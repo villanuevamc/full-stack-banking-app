@@ -7,7 +7,6 @@ app.use(express.static("public"));
 app.use(cors());
 
 var admin = require("firebase-admin");
-// var serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: "https://bad-bank-f6332-default-rtdb.firebaseio.com",
@@ -53,7 +52,7 @@ app.get("/account/create/:name/:email/:password", async function (req, res) {
 });
 
 // all accounts
-app.get("/account/all", checkIfAuthenticated, function (req, res) {
+app.get("/account/all", checkIfAuthenticated, function (_, res) {
   admin
     .getAuth()
     .getUsers([])
@@ -73,13 +72,6 @@ app.get("/account/all", checkIfAuthenticated, function (req, res) {
     .catch((error) => {
       console.log("Error fetching user data:", error);
     });
-
-  /*
-  dal.all().then((docs) => {
-    console.log(docs);
-    res.send(docs);
-  });
-  */
 });
 
 var port = 3000;

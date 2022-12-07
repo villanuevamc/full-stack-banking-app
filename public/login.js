@@ -8,7 +8,7 @@ function Login() {
   const history = useHistory();
 
   function login() {
-    firebase.auth().signInWithEmailAndPassword(email, password);
+    auth().signInWithEmailAndPassword(email, password);
 
     /*if (!user) {
       alert("That user does not exist");

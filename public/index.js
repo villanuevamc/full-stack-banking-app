@@ -1,17 +1,4 @@
 function Spa() {
-  const [users, setUsers] = React.useState([
-    {
-      name: "TestUser",
-      email: "testuser@gmail.com",
-      password: "testtest",
-      balance: 100,
-    },
-  ]);
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [loggedIn, setLoggedIn] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(window.location.hash);
-  const [lastPage, setLastPage] = React.useState("");
-
   // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyB0w_5mcwptWqXVWFqsmBlZSkWeqeUonFA",
@@ -26,7 +13,22 @@ function Spa() {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
-  const db = firebase.database();
+
+  //const db = firebase.database();
+  const auth = firebase.auth;
+
+  const [users, setUsers] = React.useState([
+    {
+      name: "TestUser",
+      email: "testuser@gmail.com",
+      password: "testtest",
+      balance: 100,
+    },
+  ]);
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(window.location.hash);
+  const [lastPage, setLastPage] = React.useState("");
 
   return (
     <HashRouter>

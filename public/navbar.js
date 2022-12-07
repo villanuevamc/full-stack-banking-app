@@ -36,7 +36,7 @@ function NavBar() {
   }
 
   function loggedIn() {
-    firebaseApp.auth().onAuthStateChanged((user) => {
+    auth().onAuthStateChanged((user) => {
       if (user) {
         return user;
       }

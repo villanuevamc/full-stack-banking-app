@@ -32,19 +32,30 @@ function CreateAccount() {
     return true;
   }
 
-  function handleCreate() {
+  const handleCreate = async () => {
     if (!validate(name, "name")) return;
     if (!validate(email, "email")) return;
     if (!validate(password, "password")) return;
+
     const url = `/account/create/${name}/${email}/${password}`;
-    (async () => {
-      var res = await fetch(url);
-      var data = await res.json();
-    })();
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Couldn't create account: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("RESULT: ", result);
+    } catch (err) {
+      console.log("Error: ", err);
+    }
 
     clearForm();
     alert("Successfully created account!");
-  }
+  };
 
   function clearForm() {
     setName("");
