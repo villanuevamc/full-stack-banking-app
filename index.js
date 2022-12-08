@@ -140,6 +140,6 @@ app.get("/account/all", checkIfAuthenticated, function (_, res) {
     });
 });
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 app.listen(port);
 console.log("Running on port: " + port);
