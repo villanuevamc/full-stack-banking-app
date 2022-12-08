@@ -7,9 +7,14 @@ app.use(express.static("public"));
 app.use(cors());
 
 var admin = require("firebase-admin");
-const { query } = require("express");
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: admin.credential.cert({
+    projectId: "bad-bank-f6332",
+    clientEmail:
+      "firebase-adminsdk-cptw4@bad-bank-f6332.iam.gserviceaccount.com",
+    privateKey:
+      "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCKVEk/fEXdWB6\nA6bY/3nWdzAJ45uNsTIngMXgh9aWf0FVTWD7yovVK2+VcfDYqtJ2tbhUD5s7iWj4\ngqDcKFTb0kmN0I1WE0iNl+f/B1qg5Nd9xRTz/O/JKeex8BzLWWMCjRmJiu8BVN5k\nvlk1Vw39oCwVu2g+gIPO+ri4xDuEnr214zZn8wqdAR6GA3ktIOfUK3Zr23Jf05FZ\nf/gVfVQBVNeFKu8Lttex8Q0yrlEFES5J1hErWzrdbjkKDcBA0r1pE1zct7H5dI6V\niMKy+/IhsBoH826kE9hJmJ5oh06kstGRDZv2NS/P+oFKDCQtcjzLCv2CqrGEqCFB\nqhVTcFg5AgMBAAECggEAKvKZtN2JFT/M8eBZ6TkFmcdudFmI4Hw4FF3bJ1HUySBn\n8rb1g2ynpqT/fyafeEW83S5QEiQLmc1Iz2ORsnEnaCJpS7m8cbQ9Qbi+w/478Uf9\nVKAiBOBHqA8hZY4vyFlC2d8dLXvyZzB/Kvih4fcaLKZf6gS0x9KElWWHM7OQWMKj\nbYR4FlBQuglvUZzoquek/LA5O4bLgxAmWM//36fEMBQVkBYYqZB5iudtmKFjwgoU\nP1NWmQENYIq/fG7NNurN+w4iw1GsTQsXzZkRF+XzpzOmmYB6kDmZPovs11+iCt5U\nxMRCOWzlYeyj+gTQBRAn2r81IjHbSr+ZQyy4m6awKQKBgQDtt3iayAMU4y8FMAuE\n6ZdpPmoqtcZI70SKzo1Szrp9cZo2REZRo2fFbqMCdj8gOv8f9uZyEYLM76z0MKP9\n6KbZVlp9UHxy1MdIRiSRoFufcAol18I4nZciq5O6qqA9AmmANa+C+irED47ky/86\nvK9V0Xk3oO7urv4xLDwAsf4TrQKBgQDRGENJjm4DH4cBOJRJxirQuNKuz8SQQ6Xc\nXSaa7x+orReEGoQp2aCGClGA0JoGiBSBa8gFhQbXKyDMEr1JIpDejpnd0WVPLtwB\nFO6e4TbgrE9LL0yONoSYTM8naFENr+CoH/Ow2jiD8r/UtViJqGu4FPwO8wx3BVQc\n3z4IeXFIPQKBgQDEr4aBgrZSBPs1rqAJVAEsWjEbr5UlaZtrwiVae6QAAQvYlLsd\n9zb4O2dytQXcFBRdjTr07JouGK0gylIV1vaeYv2yK/McTAOrQCYnu+ezTs+GqjOQ\nBowzaoVr8Jtuf11tcH4MwBK8cCcKFePS5KWqOwyxw12ObYnyg6gN5zfTbQKBgFZa\niN+F/RU5Hg55CXT2bJRK4Gfl0q4p4gQCTIFMJG0LH10lflOyV0NEW6ixfgsYhC93\nDeKJr+uJGkBttNLRfbcMeatMYWS0W5PuyyW+qWVchFruq9VH2rbzcdI6mM7oRgXp\nPEFbvl9wD52PT4N6lRIvSHH8GrfE8ZoC8KGbVheZAoGAO7K9o2VypCbHbMDqelix\nUAt4nGYCNmzN9NbGu6DgLWolCv5fxc58aZY85eTQ2k5ge491LvjACfFv66sw9WkA\nraY3sZv4aVJfV05lYJKSLyTbMrJsYDN7JGXfsolzmM4Z0duzfC5N7LUqjdA5Dkku\nhk/S3GToaYL7eO2AZnUq22s=\n-----END PRIVATE KEY-----\n",
+  }),
   databaseURL: "https://bad-bank-f6332-default-rtdb.firebaseio.com",
 });
 
