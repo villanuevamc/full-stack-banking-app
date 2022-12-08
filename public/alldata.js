@@ -4,28 +4,29 @@ function AllData() {
 
   React.useEffect(() => {
     async function fetchData() {
-      var token = await user.getIdToken();
-      const url = `/account/all`;
-      await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`Couldn't get accounts: ${response}`);
-          }
+      user?.getIdToken().then((token) => {
+        const url = `/account/all`;
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`Couldn't get accounts: ${response}`);
+            }
 
-          return res.json();
-        })
-        .then((jsonRes) => {
-          setData(jsonRes);
-        })
-        .catch((error) => {
-          console.log("Couldn't get account data: ", error);
-          alert("Sorry, we couldn't pull account data right now");
-        });
+            return res.json();
+          })
+          .then((jsonRes) => {
+            setData(jsonRes);
+          })
+          .catch((error) => {
+            console.log("Couldn't get account data: ", error);
+            alert("Sorry, we couldn't pull account data right now");
+          });
+      });
     }
     fetchData();
   }, [user]);

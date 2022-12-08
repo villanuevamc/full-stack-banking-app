@@ -62,7 +62,7 @@ app.get("/account/create/:name/:email/:password", function (req, res) {
         .add({
           name: name,
           email: email,
-          balance: 0,
+          balance: "0",
         })
         .then((docRef) => {
           res

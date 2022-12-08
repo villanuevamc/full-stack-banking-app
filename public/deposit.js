@@ -6,35 +6,46 @@ function Deposit() {
   const [deposit, setDeposit] = React.useState("");
   const [balance, setBalance] = React.useState("");
   const [uid, setUid] = React.useState("");
-  const { user, loggedIn } = React.useContext(UserContext);
+  const { user, setUser, loggedIn } = React.useContext(UserContext);
   const history = useHistory();
   if (!loggedIn) history.push("/#");
 
   React.useEffect(() => {
-    async function fetchUser() {
-      const url = `/account/user/${user.email}`;
-      var token = await user.getIdToken();
-      await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          console.log("res: ", res.json());
-          if (!res.ok) {
-            throw new Error(`${res}`);
-          }
+    firebase.auth().onAuthStateChanged((currUser) => {
+      if (currUser) {
+        setUser(currUser);
+        return true;
+      }
+      return false;
+    });
+  });
 
-          return res.json();
+  React.useEffect(() => {
+    function fetchUser() {
+      const url = `/account/user/${user.email}`;
+      user?.getIdToken().then((token) => {
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         })
-        .then((jsonRes) => {
-          setBalance(JSON.stringify(jsonRes.data.balance));
-          setUid(JSON.stringify(jsonRes.id));
-        })
-        .catch((error) => {
-          console.log(`Couldn't get user's account info: ${error}`);
-        });
+          .then((res) => {
+            res;
+            if (!res.ok) {
+              throw new Error(`${res}`);
+            }
+
+            return res.json();
+          })
+          .then((jsonRes) => {
+            setBalance(jsonRes.data.balance);
+            setUid(jsonRes.id);
+          })
+          .catch((error) => {
+            console.log(`Couldn't get user's account info: ${error}`);
+          });
+      });
     }
     fetchUser();
   }, [user]);
@@ -59,30 +70,31 @@ function Deposit() {
     var newBalance = Number(balance) + Number(deposit);
 
     const url = `/account/user/${uid}/${newBalance}`;
-    var token = await user.getIdToken();
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`${res}`);
-        }
-
-        console.log(`Success ${res}`);
-        alert(`Deposit of $${deposit} successfully made!`);
-        setDeposit("");
-        setBalance(JSON.stringify(newBalance));
+    user?.getIdToken().then((token) => {
+      fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((error) => {
-        console.log(`Couldn't update user's account: ${error}`);
-        setStatus("Error: Couldn't update user's account");
-        setBgColor("danger");
-        setTimeout(() => setStatus(""), 3000);
-        setTimeout(() => setBgColor("dark"), 3000);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res}`);
+          }
+
+          console.log(`Success ${res}`);
+          alert(`Deposit of $${deposit} successfully made!`);
+          setDeposit("");
+          setBalance(JSON.stringify(newBalance));
+        })
+        .catch((error) => {
+          console.log(`Couldn't update user's account: ${error}`);
+          setStatus("Error: Couldn't update user's account");
+          setBgColor("danger");
+          setTimeout(() => setStatus(""), 3000);
+          setTimeout(() => setBgColor("dark"), 3000);
+        });
+    });
   };
 
   return (

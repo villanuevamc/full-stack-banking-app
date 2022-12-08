@@ -11,29 +11,40 @@ function Withdraw() {
   if (!loggedIn) history.push("/#");
 
   React.useEffect(() => {
+    firebase.auth().onAuthStateChanged((currUser) => {
+      if (currUser) {
+        setUser(currUser);
+        return true;
+      }
+      return false;
+    });
+  });
+
+  React.useEffect(() => {
     async function fetchUser() {
       const url = `/account/user/${user.email}`;
-      var token = await user.getIdToken();
-      await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`${res}`);
-          }
+      user?.getIdToken().then((token) => {
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`${res}`);
+            }
 
-          return res.json();
-        })
-        .then((jsonRes) => {
-          setBalance(JSON.stringify(jsonRes.data.balance));
-          setUid(JSON.stringify(jsonRes.id));
-        })
-        .catch((error) => {
-          console.log(`Couldn't get user's account info: ${error}`);
-        });
+            return res.json();
+          })
+          .then((jsonRes) => {
+            setBalance(jsonRes.data.balance);
+            setUid(jsonRes.id);
+          })
+          .catch((error) => {
+            console.log(`Couldn't get user's account info: ${error}`);
+          });
+      });
     }
     fetchUser();
   }, [user]);
@@ -55,7 +66,7 @@ function Withdraw() {
       return;
     }
 
-    if (withdraw > user.balance) {
+    if (withdraw > balance) {
       setStatus(
         "Transaction failed: Withdrawal value can't be greater than balance"
       );
@@ -68,30 +79,31 @@ function Withdraw() {
     var newBalance = Number(balance) - Number(withdraw);
 
     const url = `/account/user/${uid}/${newBalance}`;
-    var token = await user.getIdToken();
-    await fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`${res}`);
-        }
-
-        console.log(`Success ${res}`);
-        alert(`Withdrawal of $${withdraw} successfully made!`);
-        setWithdraw("");
-        setBalance(JSON.stringify(newBalance));
+    user?.getIdToken().then((token) => {
+      fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .catch((error) => {
-        console.log(`Couldn't update user's account: ${error}`);
-        setStatus("Error: Couldn't update user's account");
-        setBgColor("danger");
-        setTimeout(() => setStatus(""), 3000);
-        setTimeout(() => setBgColor("dark"), 3000);
-      });
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res}`);
+          }
+
+          console.log(`Success ${res}`);
+          alert(`Withdrawal of $${withdraw} successfully made!`);
+          setWithdraw("");
+          setBalance(JSON.stringify(newBalance));
+        })
+        .catch((error) => {
+          console.log(`Couldn't update user's account: ${error}`);
+          setStatus("Error: Couldn't update user's account");
+          setBgColor("danger");
+          setTimeout(() => setStatus(""), 3000);
+          setTimeout(() => setBgColor("dark"), 3000);
+        });
+    });
   };
 
   return (

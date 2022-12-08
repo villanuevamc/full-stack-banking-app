@@ -13,30 +13,31 @@ function Login() {
       .signInWithEmailAndPassword(email, password)
       .then(async (userCredential) => {
         var user = userCredential.user;
-        var token = await user.getIdToken();
-        const url = `/account/user/${email}`;
-        await fetch(url, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((res) => {
-            if (!res.ok) {
-              throw new Error(`${response}`);
-            }
+        user?.getIdToken().then((token) => {
+          const url = `/account/user/${email}`;
+          fetch(url, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`${response}`);
+              }
 
-            return res.json();
-          })
-          .then((jsonRes) => {
-            setUser(jsonRes);
-            setLastPage("#/createAccount/");
-            setCurrentPage("#/");
-            history.push("/#");
-          })
-          .catch((error) => {
-            throw new Error(`${error}`);
-          });
+              return res.json();
+            })
+            .then((jsonRes) => {
+              setUser(jsonRes);
+              setLastPage("#/createAccount/");
+              setCurrentPage("#/");
+              history.push("/#");
+            })
+            .catch((error) => {
+              throw new Error(`${error}`);
+            });
+        });
       })
       .catch((error) => {
         console.log("Login failed: ", error);
