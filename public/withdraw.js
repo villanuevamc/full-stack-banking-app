@@ -22,14 +22,14 @@ function Withdraw() {
       })
         .then((res) => {
           if (!res.ok) {
-            throw new Error(`${response}`);
+            throw new Error(`${res}`);
           }
 
           return res.json();
         })
         .then((jsonRes) => {
-          setBalance(jsonRes.data.balance);
-          setUid(jsonRes.id);
+          setBalance(JSON.stringify(jsonRes.data.balance));
+          setUid(JSON.stringify(jsonRes.id));
         })
         .catch((error) => {
           console.log(`Couldn't get user's account info: ${error}`);
@@ -83,7 +83,7 @@ function Withdraw() {
         console.log(`Success ${res}`);
         alert(`Withdrawal of $${withdraw} successfully made!`);
         setWithdraw("");
-        setBalance(newBalance);
+        setBalance(JSON.stringify(newBalance));
       })
       .catch((error) => {
         console.log(`Couldn't update user's account: ${error}`);

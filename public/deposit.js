@@ -28,8 +28,8 @@ function Deposit() {
           return res.json();
         })
         .then((jsonRes) => {
-          setBalance(jsonRes.data.balance);
-          setUid(jsonRes.id);
+          setBalance(JSON.stringify(jsonRes.data.balance));
+          setUid(JSON.stringify(jsonRes.id));
         })
         .catch((error) => {
           console.log(`Couldn't get user's account info: ${error}`);
@@ -73,7 +73,7 @@ function Deposit() {
         console.log(`Success ${res}`);
         alert(`Deposit of $${deposit} successfully made!`);
         setDeposit("");
-        setBalance(newBalance);
+        setBalance(JSON.stringify(newBalance));
       })
       .catch((error) => {
         console.log(`Couldn't update user's account: ${error}`);
