@@ -38,23 +38,23 @@ function CreateAccount() {
     if (!validate(password, "password")) return;
 
     const url = `/account/create/${name}/${email}/${password}`;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
+    await fetch(url, {
+      method: "GET",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`${response}`);
+        }
+        alert("Successfully created account!");
+        clearForm();
+      })
+      .catch((error) => {
+        console.log(`Couldn't create account: ${error}`);
+        setStatus("Error: Couldn't create a new account");
+        setBgColor("danger");
+        setTimeout(() => setStatus(""), 3000);
+        setTimeout(() => setBgColor("dark"), 3000);
       });
-
-      if (!response.ok) {
-        throw new Error(`Couldn't create account: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("RESULT: ", result);
-    } catch (err) {
-      console.log("Error: ", err);
-    }
-
-    clearForm();
-    alert("Successfully created account!");
   };
 
   function clearForm() {

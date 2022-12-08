@@ -3,24 +3,47 @@ const useHistory = ReactRouterDOM.useHistory;
 function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const { user, setUser, setCurrentPage, lastPage, setLastPage } =
+  const { setUser, setCurrentPage, setLastPage } =
     React.useContext(UserContext);
   const history = useHistory();
 
   function login() {
-    auth().signInWithEmailAndPassword(email, password);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(async (userCredential) => {
+        var user = userCredential.user;
+        var token = await user.getIdToken();
+        const url = `/account/user/${email}`;
+        await fetch(url, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`${response}`);
+            }
 
-    /*if (!user) {
-      alert("That user does not exist");
-      setEmail("");
-      setPassword("");
-      return;s
-    }*/
-
-    alert("Successfully logged in!");
-    setLastPage("#/createAccount/");
-    setCurrentPage("#/");
-    history.push("/#");
+            return res.json();
+          })
+          .then((jsonRes) => {
+            setUser(jsonRes);
+            setLastPage("#/createAccount/");
+            setCurrentPage("#/");
+            history.push("/#");
+          })
+          .catch((error) => {
+            throw new Error(`${error}`);
+          });
+      })
+      .catch((error) => {
+        console.log("Login failed: ", error);
+        alert("User cannot be logged in or does not exist");
+        setEmail("");
+        setPassword("");
+      });
   }
 
   return (

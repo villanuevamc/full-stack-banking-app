@@ -1,22 +1,34 @@
 function AllData() {
   const [data, setData] = React.useState([]);
+  const { user } = React.useContext(UserContext);
 
   React.useEffect(() => {
-    // fetch all account from API
-    var token, res;
-    (async () => {
-      token = await auth.currentUser.getIdToken();
-      res = await fetch("/account/all", {
+    async function fetchData() {
+      var token = await user.getIdToken();
+      const url = `/account/all`;
+      await fetch(url, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-    })();
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`Couldn't get accounts: ${response}`);
+          }
 
-    console.log(res);
-    setData(res.json());
-  }, []);
+          return res.json();
+        })
+        .then((jsonRes) => {
+          setData(jsonRes);
+        })
+        .catch((error) => {
+          console.log("Couldn't get account data: ", error);
+          alert("Sorry, we couldn't pull account data right now");
+        });
+    }
+    fetchData();
+  }, [user]);
 
   return (
     <Card

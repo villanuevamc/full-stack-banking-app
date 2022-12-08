@@ -4,11 +4,42 @@ function Withdraw() {
   const [status, setStatus] = React.useState("");
   const [bgColor, setBgColor] = React.useState("dark");
   const [withdraw, setWithdraw] = React.useState("");
+  const [balance, setBalance] = React.useState("");
+  const [uid, setUid] = React.useState("");
   const { user, setUser, loggedIn } = React.useContext(UserContext);
   const history = useHistory();
   if (!loggedIn) history.push("/#");
 
-  function handleDeposit() {
+  React.useEffect(() => {
+    async function fetchUser() {
+      const url = `/account/user/${user.email}`;
+      var token = await user.getIdToken();
+      console.log(token);
+      await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${response}`);
+          }
+
+          return res.json();
+        })
+        .then((jsonRes) => {
+          setBalance(jsonRes.data.balance);
+          setUid(jsonRes.id);
+        })
+        .catch((error) => {
+          console.log(`Couldn't get user's account info: ${error}`);
+        });
+    }
+    fetchUser();
+  }, [user]);
+
+  const handleDeposit = async () => {
     if (isNaN(withdraw)) {
       setStatus("Error: Withdrawal value must be a number");
       setBgColor("danger");
@@ -35,11 +66,34 @@ function Withdraw() {
       return;
     }
 
-    user.balance = Number(user.balance) - Number(withdraw);
-    setUser(user);
-    alert(`Withdrawal of $${withdraw} successfully made!`);
-    setWithdraw("");
-  }
+    var newBalance = Number(balance) - Number(withdraw);
+
+    const url = `/account/user/${uid}/${newBalance}`;
+    var token = await user.getIdToken();
+    await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`${res}`);
+        }
+
+        console.log(`Success ${res}`);
+        alert(`Withdrawal of $${withdraw} successfully made!`);
+        setWithdraw("");
+        setBalance(newBalance);
+      })
+      .catch((error) => {
+        console.log(`Couldn't update user's account: ${error}`);
+        setStatus("Error: Couldn't update user's account");
+        setBgColor("danger");
+        setTimeout(() => setStatus(""), 3000);
+        setTimeout(() => setBgColor("dark"), 3000);
+      });
+  };
 
   return (
     <Card
@@ -51,7 +105,7 @@ function Withdraw() {
         <div>
           <div className="d-flex">
             <div>Balance</div>
-            <div className="ml-auto">{user.balance}</div>
+            <div className="ml-auto">{balance}</div>
           </div>
           <br />
           Withdrawal Amount

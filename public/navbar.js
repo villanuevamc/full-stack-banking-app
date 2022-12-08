@@ -1,11 +1,12 @@
 function NavBar() {
   const {
-    setLoggedIn,
     currentPage,
     setCurrentPage,
     lastPage,
     setLastPage,
     setUser,
+    loggedIn,
+    setLoggedIn,
   } = React.useContext(UserContext);
 
   React.useEffect(() => {
@@ -28,19 +29,32 @@ function NavBar() {
     if (newCurrent) newCurrent.className += " bg-dark text-white";
   }, [currentPage]);
 
-  function logout() {
-    setLoggedIn(false);
-    setUser({});
-    setLastPage(currentPage);
-    setCurrentPage("#/login/");
-  }
-
-  function loggedIn() {
-    auth().onAuthStateChanged((user) => {
-      if (user) {
-        return user;
+  React.useEffect(() => {
+    firebase.auth().onAuthStateChanged((currUser) => {
+      if (currUser) {
+        setUser(currUser);
+        setLoggedIn(true);
+        return true;
       }
+      setLoggedIn(false);
+      return false;
     });
+  });
+
+  function logout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setUser({});
+        setLoggedIn(false);
+        setLastPage(currentPage);
+        setCurrentPage("#/login/");
+      })
+      .catch((error) => {
+        console.log("Problem logging user out: ", error);
+        alert("Couldn't log user out: ");
+      });
   }
 
   return (
@@ -66,7 +80,7 @@ function NavBar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          {loggedIn ? (
+          {!loggedIn ? (
             <div className="navbar-nav">
               <a
                 id="#/login/"
@@ -83,14 +97,6 @@ function NavBar() {
                 onClick={() => setLastPage(window.location.hash)}
               >
                 Create Account
-              </a>
-              <a
-                id="#/allData/"
-                className="nav-item nav-link"
-                href="#/allData/"
-                onClick={() => setLastPage(window.location.hash)}
-              >
-                All Data
               </a>
             </div>
           ) : (
