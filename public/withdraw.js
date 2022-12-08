@@ -66,7 +66,7 @@ function Withdraw() {
       return;
     }
 
-    if (withdraw > balance) {
+    if (Number(withdraw) > Number(balance)) {
       setStatus(
         "Transaction failed: Withdrawal value can't be greater than balance"
       );
@@ -77,6 +77,7 @@ function Withdraw() {
     }
 
     var newBalance = Number(balance) - Number(withdraw);
+    JSON.stringify(newBalance);
 
     const url = `/account/user/${uid}/${newBalance}`;
     user?.getIdToken().then((token) => {
@@ -94,7 +95,7 @@ function Withdraw() {
           console.log(`Success ${res}`);
           alert(`Withdrawal of $${withdraw} successfully made!`);
           setWithdraw("");
-          setBalance(JSON.stringify(newBalance));
+          setBalance(newBalance);
         })
         .catch((error) => {
           console.log(`Couldn't update user's account: ${error}`);

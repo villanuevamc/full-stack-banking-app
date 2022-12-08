@@ -104,6 +104,7 @@ app.get("/account/user/:email", checkIfAuthenticated, function (req, res) {
         // doc.data() is never undefined for query doc snapshots
         user = { data: doc.data(), id: doc.id };
       });
+      console.log(user);
       res.status(200).send(user);
     })
     .catch((error) => {
