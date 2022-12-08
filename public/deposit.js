@@ -22,13 +22,12 @@ function Deposit() {
       })
         .then((res) => {
           if (!res.ok) {
-            throw new Error(`${response}`);
+            throw new Error(`${res}`);
           }
 
           return res.json();
         })
         .then((jsonRes) => {
-          console.log("jsonRes: ", jsonRes);
           setBalance(jsonRes.data.balance);
           setUid(jsonRes.id);
         })
