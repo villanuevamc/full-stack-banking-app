@@ -21,7 +21,7 @@ function Deposit() {
         },
       })
         .then((res) => {
-          console.log("res: ", res);
+          console.log("res: ", res.json());
           if (!res.ok) {
             throw new Error(`${res}`);
           }
