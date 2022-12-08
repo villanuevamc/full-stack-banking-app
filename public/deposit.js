@@ -14,7 +14,6 @@ function Deposit() {
     async function fetchUser() {
       const url = `/account/user/${user.email}`;
       var token = await user.getIdToken();
-      console.log(token);
       await fetch(url, {
         method: "GET",
         headers: {
@@ -31,6 +30,7 @@ function Deposit() {
         .then((jsonRes) => {
           setBalance(jsonRes.data.balance);
           setUid(jsonRes.id);
+          console.log("balance: ", balance, " and uid: ", uid);
         })
         .catch((error) => {
           console.log(`Couldn't get user's account info: ${error}`);

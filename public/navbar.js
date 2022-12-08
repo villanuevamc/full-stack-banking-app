@@ -18,13 +18,11 @@ function NavBar() {
         oldCurrent.classList.remove("bg-dark");
         oldCurrent.classList.remove("text-white");
       }
-      console.log("OLD: ", lastPage);
       setCurrentPage(window.location.hash);
     }, 10);
   }, [lastPage]);
 
   React.useEffect(() => {
-    console.log("NEW: ", currentPage);
     const newCurrent = document.getElementById(currentPage);
     if (newCurrent) newCurrent.className += " bg-dark text-white";
   }, [currentPage]);

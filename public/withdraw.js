@@ -14,7 +14,6 @@ function Withdraw() {
     async function fetchUser() {
       const url = `/account/user/${user.email}`;
       var token = await user.getIdToken();
-      console.log(token);
       await fetch(url, {
         method: "GET",
         headers: {
