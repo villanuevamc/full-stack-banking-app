@@ -28,9 +28,9 @@ function Deposit() {
           return res.json();
         })
         .then((jsonRes) => {
+          console.log("jsonRes: ", jsonRes);
           setBalance(jsonRes.data.balance);
           setUid(jsonRes.id);
-          console.log("balance: ", balance, " and uid: ", uid);
         })
         .catch((error) => {
           console.log(`Couldn't get user's account info: ${error}`);
